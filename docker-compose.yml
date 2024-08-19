@@ -1,5 +1,10 @@
 # Switch to 'postgresql' in config/database.yml before running 'docker-compose up'
 version: '3'
+
+networks:
+  traefik:
+    external: true  # Use the externally created macvlan network
+
 services:
   db:
     image: postgres
@@ -11,8 +16,10 @@ services:
       - "54333:5432"
   web:
     build: .
-    # command: tail -f /dev/null
-    command: "rails server -b 0.0.0.0"
+    command: tail -f /dev/null
+    # command: "rails server -b 0.0.0.0"
+    # command: "bundle install && rails server -b 0.0.0.0"
+    # command: "bundle clean --force && rails server -b 0.0.0.0"
     volumes:
       - .:/sample_rails_application
       - /sample_rails_application/node_modules
@@ -23,3 +30,15 @@ services:
       - "26166:26168"
     depends_on:
       - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rails-demo-app.rule=Host(`rails-demo-app.lcl2.dmytro-pro.me`)"
+      - "traefik.http.services.rails-demo-app.loadbalancer.server.port=3000"
+      - "traefik.http.routers.rails-demo-app.entrypoints=web"
+      - "traefik.docker.network=traefik"
+      ##
+      - "traefik.http.services.rails-demo-app.loadbalancer.sticky=true"
+      - "traefik.http.services.rails-demo-app.loadbalancer.sticky.cookie.name=sticky_cookie"
+      - "traefik.http.services.rails-demo-app.loadbalancer.sticky.cookie.secure=true"
+    networks:
+      - traefik

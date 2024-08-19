@@ -12,6 +12,6 @@ module SampleApp
     config.load_defaults 6.0
 
     # Include the authenticity token in remote forms.
-    config.action_view.embed_authenticity_token_in_remote_forms = true
+    config.action_view.embed_authenticity_token_in_remote_forms = false
   end
 end
