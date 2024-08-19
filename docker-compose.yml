@@ -11,7 +11,8 @@ services:
       - "54333:5432"
   web:
     build: .
-    command: tail -f /dev/null
+    # command: tail -f /dev/null
+    command: "rails server -b 0.0.0.0"
     volumes:
       - .:/sample_rails_application
       - /sample_rails_application/node_modules
