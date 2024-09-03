@@ -32,7 +32,7 @@ services:
       - db
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.rails-demo-app.rule=Host(`rails-demo-app.lcl2.dmytro-pro.me`)"
+      - "traefik.http.routers.rails-demo-app.rule=Host(`rails-demo-app.ing.dmytro-pro.me`)"
       - "traefik.http.services.rails-demo-app.loadbalancer.server.port=3000"
       - "traefik.http.routers.rails-demo-app.entrypoints=web"
       - "traefik.docker.network=traefik"
